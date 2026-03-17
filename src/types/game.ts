@@ -17,7 +17,8 @@ export interface Room {
   players: Player[];
   characters: Character[];
   phase: GamePhase;
-  winnerId?: string;
+  currentTurn?: string | null;
+  winnerId?: string | null;
   correctCharacter?: string;
 }
 
@@ -26,6 +27,7 @@ export type GamePhase =
   | 'board-setup'
   | 'character-selection'
   | 'playing'
+  | 'final-guess'
   | 'game-over';
 
 // Socket events
@@ -46,5 +48,7 @@ export interface ClientToServerEvents {
   'eliminate-character': (characterId: string) => void;
   'restore-character': (characterId: string) => void;
   'guess-character': (characterId: string) => void;
+  'end-turn': () => void;
+  'edit-board': () => void;
   'rematch': () => void;
 }

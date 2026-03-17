@@ -22,6 +22,7 @@ interface SocketContextType {
   eliminateCharacter: (characterId: string) => void;
   restoreCharacter: (characterId: string) => void;
   guessCharacter: (characterId: string) => void;
+  editBoard: () => void;
   rematch: () => void;
 }
 
@@ -152,6 +153,12 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   }, [socket]);
 
+  const editBoard = useCallback(() => {
+
+    socket?.emit('edit-board');
+
+  }, [socket]);
+
   return (
     <SocketContext.Provider
       value={{
@@ -169,6 +176,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         eliminateCharacter,
         restoreCharacter,
         guessCharacter,
+        editBoard,
         rematch,
       }}
     >

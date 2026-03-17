@@ -27,6 +27,18 @@ function generateRoomCode() {
   return code;
 }
 
+function resetRoundState(room) {
+  room.winnerId = null;
+  room.correctCharacter = null;
+  room.potentialWinner = null;
+  room.currentTurn = null;
+
+  room.players.forEach((player) => {
+    player.selectedCharacter = null;
+    player.eliminatedCharacters = [];
+  });
+}
+
 function broadcastRoom(roomCode) {
 
   const room = rooms.get(roomCode);
@@ -127,6 +139,7 @@ io.on('connection', (socket) => {
 
     if (!player?.isHost) return;
 
+    resetRoundState(room);
     room.phase = 'board-setup';
 
     broadcastRoom(currentRoom);
@@ -139,8 +152,9 @@ io.on('connection', (socket) => {
   socket.on('add-character', ({ name, imageUrl }) => {
 
     const room = rooms.get(currentRoom);
+    const player = room?.players.find(p => p.id === socket.id);
 
-    if (!room || room.phase !== 'board-setup') return;
+    if (!room || room.phase !== 'board-setup' || !player?.isHost) return;
 
     room.characters.push({
       id: uuidv4(),
@@ -158,8 +172,9 @@ io.on('connection', (socket) => {
   socket.on('remove-character', (characterId) => {
 
     const room = rooms.get(currentRoom);
+    const player = room?.players.find(p => p.id === socket.id);
 
-    if (!room || room.phase !== 'board-setup') return;
+    if (!room || room.phase !== 'board-setup' || !player?.isHost) return;
 
     room.characters = room.characters.filter(c => c.id !== characterId);
 
@@ -173,8 +188,9 @@ io.on('connection', (socket) => {
   socket.on('finish-setup', () => {
 
     const room = rooms.get(currentRoom);
+    const player = room?.players.find(p => p.id === socket.id);
 
-    if (!room) return;
+    if (!room || !player?.isHost) return;
 
     room.phase = 'character-selection';
 
@@ -357,24 +373,35 @@ io.on('connection', (socket) => {
   });
 
   // ===============================
+  // EDIT BOARD AFTER GAME
+  // ===============================
+  socket.on('edit-board', () => {
+
+    const room = rooms.get(currentRoom);
+    const player = room?.players.find(p => p.id === socket.id);
+
+    if (!room || room.phase !== 'game-over' || !player?.isHost) return;
+
+    resetRoundState(room);
+    room.phase = 'board-setup';
+
+    broadcastRoom(currentRoom);
+
+  });
+
+  // ===============================
   // REMATCH
+  // ===============================
   // ===============================
   socket.on('rematch', () => {
 
     const room = rooms.get(currentRoom);
+    const player = room?.players.find(p => p.id === socket.id);
 
-    if (!room) return;
+    if (!room || room.phase !== 'game-over' || !player?.isHost) return;
 
+    resetRoundState(room);
     room.phase = 'character-selection';
-    room.winnerId = null;
-    room.correctCharacter = null;
-    room.potentialWinner = null;
-
-    room.players.forEach(p => {
-      p.selectedCharacter = null;
-      p.eliminatedCharacters = [];
-    });
-
     room.currentTurn = room.players.find(p => p.isHost).id;
 
     broadcastRoom(currentRoom);

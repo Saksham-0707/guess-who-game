@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SocketProvider } from "@/context/SocketContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import HomePage from "./pages/HomePage";
 import LobbyPage from "./pages/LobbyPage";
 import BoardSetupPage from "./pages/BoardSetupPage";
@@ -16,23 +17,25 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <SocketProvider>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/lobby" element={<LobbyPage />} />
-            <Route path="/setup" element={<BoardSetupPage />} />
-            <Route path="/select" element={<CharacterSelectPage />} />
-            <Route path="/game" element={<GameBoardPage />} />
-            <Route path="/gameover" element={<GameOverPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </SocketProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner richColors />
+        <BrowserRouter>
+          <SocketProvider>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/lobby" element={<LobbyPage />} />
+              <Route path="/setup" element={<BoardSetupPage />} />
+              <Route path="/select" element={<CharacterSelectPage />} />
+              <Route path="/game" element={<GameBoardPage />} />
+              <Route path="/gameover" element={<GameOverPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </SocketProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

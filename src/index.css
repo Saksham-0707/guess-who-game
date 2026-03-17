@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,54 +6,102 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    --background: 42 33% 97%;
+    --foreground: 210 18% 14%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 210 18% 14%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 210 18% 14%;
 
-    --primary: 250 65% 55%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 270 70% 65%;
+    --primary: 161 74% 33%;
+    --primary-foreground: 45 45% 98%;
+    --primary-glow: 171 65% 46%;
 
-    --secondary: 220 15% 92%;
-    --secondary-foreground: 220 25% 15%;
+    --secondary: 40 28% 91%;
+    --secondary-foreground: 210 18% 18%;
 
-    --muted: 220 15% 94%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 42 26% 93%;
+    --muted-foreground: 215 12% 42%;
 
-    --accent: 170 60% 45%;
+    --accent: 200 82% 55%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 55%;
+    --destructive: 4 80% 56%;
     --destructive-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 39 92% 54%;
+    --warning-foreground: 210 20% 12%;
 
-    --success: 152 60% 42%;
+    --success: 151 64% 42%;
     --success-foreground: 0 0% 100%;
 
-    --border: 220 15% 88%;
-    --input: 220 15% 88%;
-    --ring: 250 65% 55%;
+    --border: 35 24% 85%;
+    --input: 35 24% 85%;
+    --ring: 161 74% 33%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
     --font-heading: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'Manrope', sans-serif;
 
-    --shadow-card: 0 4px 24px -4px hsl(220 25% 10% / 0.08);
-    --shadow-elevated: 0 12px 40px -8px hsl(250 65% 55% / 0.15);
-    --gradient-primary: linear-gradient(135deg, hsl(250 65% 55%), hsl(270 70% 65%));
-    --gradient-hero: linear-gradient(160deg, hsl(250 65% 55%), hsl(200 80% 55%));
-    --gradient-surface: linear-gradient(180deg, hsl(220 20% 97%), hsl(230 20% 94%));
+    --shadow-card: 0 24px 65px -38px hsl(200 55% 18% / 0.28);
+    --shadow-elevated: 0 30px 80px -34px hsl(161 74% 33% / 0.34);
+    --gradient-primary: linear-gradient(135deg, hsl(161 74% 33%), hsl(196 78% 48%));
+    --gradient-hero: radial-gradient(circle at top, hsl(196 92% 84% / 0.95), transparent 38%),
+      linear-gradient(135deg, hsl(42 45% 95%), hsl(36 35% 92%));
+    --gradient-surface: linear-gradient(180deg, hsl(42 33% 97%), hsl(40 30% 93%));
 
-    --eliminated: 0 0% 75%;
-    --selected: 48 90% 55%;
+    --eliminated: 210 8% 74%;
+    --selected: 39 92% 54%;
+  }
+
+  .dark {
+    --background: 210 24% 9%;
+    --foreground: 42 30% 96%;
+
+    --card: 210 22% 12%;
+    --card-foreground: 42 30% 96%;
+
+    --popover: 210 22% 12%;
+    --popover-foreground: 42 30% 96%;
+
+    --primary: 164 72% 44%;
+    --primary-foreground: 210 30% 9%;
+    --primary-glow: 192 87% 62%;
+
+    --secondary: 214 18% 18%;
+    --secondary-foreground: 42 30% 96%;
+
+    --muted: 214 18% 16%;
+    --muted-foreground: 214 14% 70%;
+
+    --accent: 194 82% 60%;
+    --accent-foreground: 210 30% 9%;
+
+    --destructive: 5 84% 63%;
+    --destructive-foreground: 0 0% 100%;
+
+    --warning: 39 96% 60%;
+    --warning-foreground: 210 30% 9%;
+
+    --success: 151 64% 44%;
+    --success-foreground: 210 30% 9%;
+
+    --border: 215 18% 24%;
+    --input: 215 18% 24%;
+    --ring: 164 72% 44%;
+
+    --shadow-card: 0 28px 70px -40px hsl(210 80% 2% / 0.82);
+    --shadow-elevated: 0 30px 84px -30px hsl(164 72% 44% / 0.35);
+    --gradient-primary: linear-gradient(135deg, hsl(164 72% 44%), hsl(194 82% 60%));
+    --gradient-hero: radial-gradient(circle at top, hsl(194 82% 60% / 0.18), transparent 35%),
+      linear-gradient(180deg, hsl(210 24% 10%), hsl(216 28% 7%));
+    --gradient-surface: linear-gradient(180deg, hsl(210 24% 9%), hsl(216 26% 7%));
+
+    --eliminated: 214 10% 38%;
+    --selected: 39 96% 60%;
   }
 }
 
@@ -62,13 +110,43 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-body);
+  html {
+    color-scheme: light;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top left, hsl(var(--primary) / 0.08), transparent 26%),
+      radial-gradient(circle at top right, hsl(var(--accent) / 0.08), transparent 24%),
+      var(--gradient-surface);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      background-image 220ms ease;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
   }
 }
 
@@ -87,5 +165,13 @@
 
   .shadow-elevated {
     box-shadow: var(--shadow-elevated);
+  }
+
+  .glass-panel {
+    @apply border border-border/60 bg-card/75 backdrop-blur-xl;
+  }
+
+  .text-balance {
+    text-wrap: balance;
   }
 }
