@@ -7,6 +7,7 @@ import { PageShell } from '@/components/PageShell';
 import { useSocket } from '@/context/SocketContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import type { RevealedSelection } from '@/types/game';
 
 const GameOverPage = () => {
   const { room, playerId, editBoard, rematch } = useSocket();
@@ -29,15 +30,9 @@ const GameOverPage = () => {
   const isDraw = room.winnerId === null;
   const isWinner = room.winnerId === playerId;
   const winner = room.players.find((player) => player.id === room.winnerId);
-  const correctChar = room.characters.find((character) => character.id === room.correctCharacter);
   const currentPlayer = room.players.find((player) => player.id === playerId);
   const isHost = currentPlayer?.isHost ?? false;
-  const revealedSelections = room.players
-    .map((player) => ({
-      player,
-      character: room.characters.find((character) => character.id === player.selectedCharacter),
-    }))
-    .filter((entry) => entry.character);
+  const revealedSelections = room.revealedSelections ?? [];
 
   const handleEditBoard = () => {
     editBoard();
@@ -107,12 +102,12 @@ const GameOverPage = () => {
             <CardDescription>The revealed answer gets highlighted so the result screen feels definitive.</CardDescription>
           </CardHeader>
           <CardContent>
-            {correctChar ? (
+            {room.correctCharacterData ? (
               <div className="max-w-sm">
                 <CharacterTile
-                  id={correctChar.id}
-                  name={correctChar.name}
-                  imageUrl={correctChar.imageUrl}
+                  id="correct-character"
+                  name={room.correctCharacterData.name}
+                  imageUrl={room.correctCharacterData.imageUrl}
                   highlighted
                   badge="Revealed"
                   footer={<p className="text-xs text-muted-foreground">The final answer for this round</p>}
@@ -136,22 +131,20 @@ const GameOverPage = () => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2">
-            {revealedSelections.map(({ player, character }) => (
-              <div key={player.id} className="space-y-3">
+            {revealedSelections.map(({ playerId: revealedPlayerId, playerName, character }: RevealedSelection) => (
+              <div key={revealedPlayerId} className="space-y-3">
                 <p className="text-sm font-semibold text-foreground">
-                  {player.name}
-                  {player.id === playerId ? ' (You)' : ''}
+                  {playerName}
+                  {revealedPlayerId === playerId ? ' (You)' : ''}
                 </p>
-                {character && (
-                  <CharacterTile
-                    id={character.id}
-                    name={character.name}
-                    imageUrl={character.imageUrl}
-                    highlighted
-                    badge="Chosen"
-                    footer={<p className="text-xs text-muted-foreground">Secret pick from this round</p>}
-                  />
-                )}
+                <CharacterTile
+                  id={`revealed-${revealedPlayerId}`}
+                  name={character.name}
+                  imageUrl={character.imageUrl}
+                  highlighted
+                  badge="Chosen"
+                  footer={<p className="text-xs text-muted-foreground">Secret pick from this round</p>}
+                />
               </div>
             ))}
           </div>

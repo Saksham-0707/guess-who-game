@@ -45,21 +45,53 @@ function broadcastRoom(roomCode) {
 
   if (!room) return;
 
+  const correctCharacter = room.characters.find(
+    character => character.id === room.correctCharacter
+  );
+
+  const revealedSelections =
+    room.phase === 'game-over'
+      ? room.players
+          .map(player => {
+            const character = room.characters.find(
+              entry => entry.id === player.selectedCharacter
+            );
+
+            if (!character) return null;
+
+            return {
+              playerId: player.id,
+              playerName: player.name,
+              character: {
+                name: character.name,
+                imageUrl: character.imageUrl,
+              },
+            };
+          })
+          .filter(Boolean)
+      : undefined;
+
   io.to(roomCode).emit('room-updated', {
     code: room.code,
     players: room.players.map(p => ({
       id: p.id,
       name: p.name,
       isHost: p.isHost,
-      selectedCharacter:
-        room.phase === 'game-over' ? p.selectedCharacter : p.selectedCharacter ? '***' : undefined,
+      selectedCharacter: p.selectedCharacter ? '***' : undefined,
       eliminatedCharacters: p.eliminatedCharacters,
     })),
     characters: room.characters,
     phase: room.phase,
     currentTurn: room.currentTurn,
     winnerId: room.winnerId,
-    correctCharacter: room.phase === 'game-over' ? room.correctCharacter : undefined,
+    correctCharacterData:
+      room.phase === 'game-over' && correctCharacter
+        ? {
+            name: correctCharacter.name,
+            imageUrl: correctCharacter.imageUrl,
+          }
+        : undefined,
+    revealedSelections,
   });
 
   room.players.forEach((player) => {

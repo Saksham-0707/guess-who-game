@@ -94,7 +94,7 @@ const CharacterSelectPage = () => {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {room.characters.map((character) => {
-          const isSelected = selectedId === character.id || currentPlayer?.selectedCharacter === character.id;
+          const isSelected = selectedId === character.id || mySelectedCharacterId === character.id;
           return (
             <CharacterTile
               key={character.id}

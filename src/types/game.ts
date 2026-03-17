@@ -8,8 +8,19 @@ export interface Player {
   id: string;
   name: string;
   isHost: boolean;
-  selectedCharacter?: string; // character id
+  selectedCharacter?: string;
   eliminatedCharacters: string[]; // character ids
+}
+
+export interface RevealedCharacterData {
+  name: string;
+  imageUrl: string;
+}
+
+export interface RevealedSelection {
+  playerId: string;
+  playerName: string;
+  character: RevealedCharacterData;
 }
 
 export interface Room {
@@ -19,7 +30,8 @@ export interface Room {
   phase: GamePhase;
   currentTurn?: string | null;
   winnerId?: string | null;
-  correctCharacter?: string;
+  correctCharacterData?: RevealedCharacterData;
+  revealedSelections?: RevealedSelection[];
 }
 
 export type GamePhase =
