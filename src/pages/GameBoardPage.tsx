@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, HelpCircle, RotateCcw, ShieldAlert } from 'lucide-react';
+import { Crown, Eye, EyeOff, HelpCircle, RotateCcw, ShieldAlert } from 'lucide-react';
 import { CharacterTile } from '@/components/CharacterTile';
 import { PageLoader } from '@/components/PageLoader';
 import { PageShell } from '@/components/PageShell';
@@ -10,14 +10,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const GameBoardPage = () => {
-  const { room, playerId, eliminateCharacter, restoreCharacter, socket } = useSocket();
+  const { room, playerId, mySelectedCharacterId, eliminateCharacter, restoreCharacter, socket } = useSocket();
   const navigate = useNavigate();
   const [guessOpen, setGuessOpen] = useState(false);
+  const [hideCharacter, setHideCharacter] = useState(true);
 
   const currentPlayer = room?.players.find((player) => player.id === playerId);
   const opponent = room?.players.find((player) => player.id !== playerId);
   const isMyTurn = room?.currentTurn === playerId;
   const isFinalGuess = room?.phase === 'final-guess';
+  const myCharacter = room?.characters.find((character) => character.id === mySelectedCharacterId);
 
   useEffect(() => {
     if (!room) {
@@ -131,6 +133,41 @@ const GameBoardPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      {myCharacter && (
+        <Card>
+          <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle className="text-2xl">Your selected character</CardTitle>
+              <CardDescription>
+                This stays available during the match, with a quick hide toggle for privacy.
+              </CardDescription>
+            </div>
+            <Button type="button" variant="outline" onClick={() => setHideCharacter((value) => !value)}>
+              {hideCharacter ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              {hideCharacter ? 'Show character' : 'Hide character'}
+            </Button>
+          </CardHeader>
+          <CardContent>
+            {hideCharacter ? (
+              <div className="rounded-[24px] border border-border/60 bg-secondary/60 p-6 text-sm text-muted-foreground">
+                Your chosen character is hidden right now.
+              </div>
+            ) : (
+              <div className="max-w-sm">
+                <CharacterTile
+                  id={myCharacter.id}
+                  name={myCharacter.name}
+                  imageUrl={myCharacter.imageUrl}
+                  selected
+                  badge="Your pick"
+                  footer={<p className="text-xs text-muted-foreground">This card is only for your own reference</p>}
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {room.characters.map((character) => (

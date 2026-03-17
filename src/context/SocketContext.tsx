@@ -11,6 +11,7 @@ interface SocketContextType {
   socket: GameSocket | null;
   room: Room | null;
   playerId: string | null;
+  mySelectedCharacterId: string | null;
   isConnected: boolean;
   createRoom: (playerName: string) => void;
   joinRoom: (roomCode: string, playerName: string) => void;
@@ -39,6 +40,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [socket, setSocket] = useState<GameSocket | null>(null);
   const [room, setRoom] = useState<Room | null>(null);
   const [playerId, setPlayerId] = useState<string | null>(null);
+  const [mySelectedCharacterId, setMySelectedCharacterId] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
@@ -72,6 +74,16 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (s.id) {
         setPlayerId(s.id);
       }
+
+      if (updatedRoom.phase === 'board-setup' || updatedRoom.phase === 'lobby') {
+        setMySelectedCharacterId(null);
+      }
+
+    });
+
+    s.on('your-character', (characterId) => {
+
+      setMySelectedCharacterId(characterId);
 
     });
 
@@ -165,6 +177,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         socket,
         room,
         playerId,
+        mySelectedCharacterId,
         isConnected,
         createRoom,
         joinRoom,

@@ -51,7 +51,8 @@ function broadcastRoom(roomCode) {
       id: p.id,
       name: p.name,
       isHost: p.isHost,
-      selectedCharacter: p.selectedCharacter ? '***' : undefined,
+      selectedCharacter:
+        room.phase === 'game-over' ? p.selectedCharacter : p.selectedCharacter ? '***' : undefined,
       eliminatedCharacters: p.eliminatedCharacters,
     })),
     characters: room.characters,
@@ -59,6 +60,10 @@ function broadcastRoom(roomCode) {
     currentTurn: room.currentTurn,
     winnerId: room.winnerId,
     correctCharacter: room.phase === 'game-over' ? room.correctCharacter : undefined,
+  });
+
+  room.players.forEach((player) => {
+    io.to(player.id).emit('your-character', player.selectedCharacter ?? null);
   });
 
 }

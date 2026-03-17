@@ -33,6 +33,7 @@ export type GamePhase =
 // Socket events
 export interface ServerToClientEvents {
   'room-updated': (room: Room) => void;
+  'your-character': (characterId: string | null) => void;
   'error': (message: string) => void;
   'game-over': (data: { winnerId: string; characterName: string }) => void;
 }

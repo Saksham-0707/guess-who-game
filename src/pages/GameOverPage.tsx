@@ -32,6 +32,12 @@ const GameOverPage = () => {
   const correctChar = room.characters.find((character) => character.id === room.correctCharacter);
   const currentPlayer = room.players.find((player) => player.id === playerId);
   const isHost = currentPlayer?.isHost ?? false;
+  const revealedSelections = room.players
+    .map((player) => ({
+      player,
+      character: room.characters.find((character) => character.id === player.selectedCharacter),
+    }))
+    .filter((entry) => entry.character);
 
   const handleEditBoard = () => {
     editBoard();
@@ -120,6 +126,37 @@ const GameOverPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-3xl">Both chosen characters</CardTitle>
+          <CardDescription>
+            Once the round ends, both players can see the final secret picks.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {revealedSelections.map(({ player, character }) => (
+              <div key={player.id} className="space-y-3">
+                <p className="text-sm font-semibold text-foreground">
+                  {player.name}
+                  {player.id === playerId ? ' (You)' : ''}
+                </p>
+                {character && (
+                  <CharacterTile
+                    id={character.id}
+                    name={character.name}
+                    imageUrl={character.imageUrl}
+                    highlighted
+                    badge="Chosen"
+                    footer={<p className="text-xs text-muted-foreground">Secret pick from this round</p>}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </PageShell>
   );
 };
